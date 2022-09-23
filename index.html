@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link rel="icon" href="./images/paint_icon.png">
+    <title>Image Editor</title>
+</head>
+<body>
+    <p id="start-field">
+        Choose the image that you want to edit: 
+        <input type="file" id="main-image-loader" accept=".jpeg, .png, .jpg">
+    </p>
+
+    <div id="tools-block">
+        <div class="zoom-block">
+            <p>Zoom: </p>
+            <input type="text" value="100%" id="zoom-input">
+        </div>
+
+        <div class="color-tool">
+            <p>Color: </p>
+            <input type="color" id="color-picker-input">
+        </div>
+
+        <div class="line-width-tool">
+            <p>Line width:</p>
+            <input type="text" id="line-width-input" value="10">
+        </div>
+
+        <div class="edit-elems-tool">
+            <img src="./images/cursor_icon.png" id="edit-elems-tool-btn" alt="">
+        </div>
+
+        <div class="add-image-block">
+            <img src="./images/image_icon.png" id="add-image-btn" alt="">
+            <input type="file" id="add-img-file-input" accept=".jpg,.png,.jpeg">
+        </div>
+
+        <div class="rectangle-tool">
+            <img src="./images/rectangle_icon.png" id="rectangle-tool-btn" alt="">
+        </div>
+
+        <div class="circle-tool">
+            <img src="./images/circle_icon.png" id="circle-tool-btn" alt="">
+        </div>
+
+        <div class="triangle-tool">
+            <img src="./images/triangle_icon.png" id="triangle-tool-btn" alt="">
+        </div>
+
+        <div class="text-tool">
+            <img src="./images/text_icon.png" id="text-tool-btn">
+        </div>
+
+        <div class="paint-tool">
+            <img src="./images/paint_icon.png" id="paint-tool-btn" alt="">
+        </div>
+
+        <div class="crop-tool">
+            <img src="./images/crop_icon.png" id="crop-tool-btn" alt="">
+        </div>
+
+        <div class="save-file-block">
+            <img src="./images/save_icon.png" id="save-btn" alt="">
+            <a id="download-image-btn" download>Download Image</a> 
+        </div>
+        
+        <div class="element-props-tool-block">
+            <div class="row">
+                <p>Width: </p>
+                <input type="text" maxlength="5" id="elem-props-tool-width-block-id">
+            </div>
+            <div class="row">
+                <p>Height: </p>
+                <input type="text" maxlength="5" id="elem-props-tool-height-block-id">
+            </div>
+
+            <div class="row">
+                <p>Z index: </p>
+                <input type="text" maxlength="3" id="elem-props-tool-z-index">
+            </div>
+
+            <div class="row">
+                <p>Text: </p>
+                <input type="text" id="elem-props-tool-text">
+            </div>
+        </div>
+
+        <div class="cursor-tool">
+            <p id="x">x: 0</p>
+            <p id="y">y: 0</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <canvas id="additional-canvas"></canvas>
+    
+    <script type="module" src="/js/index.js"></script>
+</body>
+</html>
