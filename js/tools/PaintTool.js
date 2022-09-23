@@ -38,6 +38,8 @@ export default class PaintTool extends Tool {
     paintLine(e) {
         if (!this.#is_tool_active) return;
 
+        // each time when user continue to paint (moving his mouse while holding the left button)
+        // add the point element to current line element
         var x = (e.x - this.custom_canvas_obj.offsetX) / this.custom_canvas_obj.coef_similarity;
         var y = (e.y - this.custom_canvas_obj.offsetY) / this.custom_canvas_obj.coef_similarity;
         
@@ -51,6 +53,8 @@ export default class PaintTool extends Tool {
 
     startPaint(e) {
         this.#is_tool_active = true;
+        
+        // create the line element and add this element to elements list that will be render
         this.#line_element = new LineElement(
             {
                 x: (e.x - this.custom_canvas_obj.offsetX) / this.custom_canvas_obj.coef_similarity,
@@ -65,6 +69,7 @@ export default class PaintTool extends Tool {
         this.custom_canvas_obj.renderImage();
     }
     
+    // stop adding the points elements to line element
     stopPaint() {
         if (!this.#is_tool_active) return;
 

@@ -3,7 +3,7 @@ import ImageElement from "../elements/ImageElement.js";
 
 export default class ImageTool extends ToolR {
     img_obj = new Image();
-    image_objs = []; // array that contains all image objects
+    image_objs = []; // array that contains all image objects refs
     #image_props = {
         x: 0,
         y: 0,
@@ -31,6 +31,7 @@ export default class ImageTool extends ToolR {
         // user didn't choose the area of future image
         if (this.#image_props.width <= 3 || this.#image_props.height <= 3) return;
 
+        // after the user selected the area of object load the image
         this.add_img_file_input.click();
     }
 
@@ -46,6 +47,7 @@ export default class ImageTool extends ToolR {
     }
 
     ImageLoadedEvent(img) {
+        // generate imageElement as rect
         var element = new ImageElement(
             {
                 x: this.#image_props.x, 

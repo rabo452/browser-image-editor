@@ -1,3 +1,4 @@
+// base class of tools 
 export default class Tool {
     constructor(toolBtn, custom_canvas_obj) {
         this.toolBtn = toolBtn;
@@ -7,6 +8,7 @@ export default class Tool {
         this.toolBtn.addEventListener("click", this.toolBtnClickEvent);
     }
 
+    // activate or deactivate the tool
     toolBtnClickEvent(e) {
         // activate this tool
         if (this.custom_canvas_obj.current_tool != this) {
@@ -25,6 +27,7 @@ export default class Tool {
         }
     }
 
+    // the selection of tool button that user can understand what tool he's using
     setToolSelection() {
         this.toolBtn.style.border = "2px dashed orange";
     }
@@ -33,7 +36,7 @@ export default class Tool {
         this.toolBtn.style.removeProperty("border");
     }
 
-    // set events after selection
+    // most tools need to handle the events in canvas
     setEventsOnCanvas() {}
     removeEventsOnCanvas() {}
     deActivateTool() {

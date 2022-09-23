@@ -12,19 +12,29 @@ import SizeChangerElementNE from "../elements/SizeChangers/SizeChangerElementNE.
 import SizeChangerElementSW from "../elements/SizeChangers/SizeChangerElementSW.js";
 import SizeChangerElementSE from "../elements/SizeChangers/SizeChangerElementSE.js";
 
+// selecting this tool user can select the element on canvas
+// and edit it as he wants
 export default class SelectTool extends Tool {
     #selected_elem = null;
+    // moving element now or not
     #is_moving = false;
+    // start moving event pos
     #start_move_pos = {
         x: 0,
         y: 0
     }
+    // start moving props of element
     #start_elem_pos = {
         x: 0,
         y: 0
     }
+    
+    // additional tools that works only with selectTool
+    // tools that changes the element size
     #size_changes = [];
+    // selection rect that user can understand what element he's editting
     #selection_rect = null;
+    // while moving the element this cursor will be shown
     #mouse_move_canvas_cursor_css = "grabbing";
 
     constructor(toolBtn, custom_canvas_obj) {
@@ -40,6 +50,7 @@ export default class SelectTool extends Tool {
         this.custom_canvas_obj.renderImage();
         super.toolBtnClickEvent(e);
 
+        // remove elem if this tool deactivated
         this.#is_moving = false;
         this.#selected_elem = null;
     }
@@ -63,15 +74,18 @@ export default class SelectTool extends Tool {
     }
 
     deActivateTool() {
-        // after the tool is deactivated change the color input as default color (that written in global obj)
+        // after the tool is deactivated 
+        // change the color input as default color (that written in global obj)
         var rgb_color = this.custom_canvas_obj.rgb_color;
         var hex_color = ColorTool.rgbToHex(rgb_color[0], rgb_color[1], rgb_color[2]);
-
         // get color tool and set the value
         var color_tool_ref = this.custom_canvas_obj.getToolRef(ColorTool);
         color_tool_ref.setColor(hex_color);
 
+        // remove element props tool target element
         this.custom_canvas_obj.getToolRef(ElemPropsTool).removeElem();
+        // remove size changes from elements list to render
+        // remove selection rect from elements list to render
         this.removeSelectionRect();
         this.removeSizeChanges();
 
@@ -80,18 +94,27 @@ export default class SelectTool extends Tool {
         this.custom_canvas_obj.renderImage();
     }
 
+    // if user changed the color in color tool
+    // then he's meaning to change the target element rgb color
+    // if selected element has the rgb_color then change it
     setColorOnSelectedElem(rgb_color = []) {
         if (!this.#selected_elem || this.#is_moving) return;
         this.#selected_elem.rgb_color = [rgb_color[0], rgb_color[1], rgb_color[2]];
         this.custom_canvas_obj.renderImage();
     }
 
+    // if user changed the line width in tool
+    // then he's meaning to change the line width property of selected element 
     setWidthLineOnSelectedElem(line_width) {
         this.#selected_elem.lineWidth = line_width;
         this.custom_canvas_obj.renderImage();
     }
 
+    // if user selected the element and typed button "DELETE"
+    // then element will be deleted from list of elements to render 
     keyDownHandler(e) {
+        // the handler setted for whole doc
+        // if the target is input then left this
         if (e.target.tagName == "INPUT") return;
         
         if (e.key == "Backspace" 
@@ -106,11 +129,16 @@ export default class SelectTool extends Tool {
         }
     }
 
+    // check: Was the user hitted to some element or not
+    // if yes - select it
     selectElem(e) {
         var x = (e.x - this.custom_canvas_obj.offsetX) / this.custom_canvas_obj.coef_similarity;
         var y = (e.y - this.custom_canvas_obj.offsetY) / this.custom_canvas_obj.coef_similarity;
         var elem_found = this.custom_canvas_obj.getElementAtPoint(x,y);
         
+        // if hitted element is sizechanger - left
+        // if not then size changers won't work
+        // as the events handlers that setted in them won't be started
         if (elem_found instanceof SizeChangerElement) return;
 
         var elem_props_tool = this.custom_canvas_obj.getToolRef(ElemPropsTool);

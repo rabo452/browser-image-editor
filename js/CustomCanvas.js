@@ -1,19 +1,28 @@
 import Element from "./Element.js";
 import Tool from "./Tool.js";
 
+// TODO: set the right name of this global state class
+// global state class that render the image
 export default class CustomCanvas {
     #canvas_html_element;
     #ctx;
+    // elements that will be rendered
     #elements = [];
     #start_resolution = {
         width: 0,
         height: 0
     }
+    // the coefficent that scalling the image
+    // or zoom param
+    // less zoom - less size of image
     coef_similarity = 1;
+    
+    // elem params
     global_z_index = 0;
     rgb_color = [0, 0, 0];
     line_width = 10;
     current_tool = null;
+    // all tools objects
     tools = [];
     main_image = null;
     additional_canvas = null;
@@ -40,6 +49,7 @@ export default class CustomCanvas {
         this.#canvas_html_element.width = start_width;
         this.#canvas_html_element.height = start_height;
 
+        // each time when user scrolling need to change the offsets
         this.changeOffsetHandler = this.changeOffsetHandler.bind(this);
         document.addEventListener("scroll", this.changeOffsetHandler);
     }
@@ -49,6 +59,7 @@ export default class CustomCanvas {
         this.offsetX = this.start_offsetX - window.pageXOffset;
     }
 
+    // other tools by this method can get the reference for another tool by class
     getToolRef(tool_class) {
         for (var tool_ref of this.tools) {
             if (tool_ref instanceof tool_class) return tool_ref;
@@ -77,22 +88,28 @@ export default class CustomCanvas {
         var canvas = this.#canvas_html_element;
         var start_width = this.#start_resolution.width;
         var start_height = this.#start_resolution.height;
- 
+        
+        // clear image
         ctx.clearRect(0,0, start_width, start_height);
+        // set to normal all scaling and translate methods
         ctx.resetTransform();
 
+        // set canvas resolution as setted zoom
         canvas.width = start_width * coef_similarity;
         canvas.height = start_height * coef_similarity;
-        
+        // scale image as selected zoom
         ctx.scale(coef_similarity, coef_similarity);
         
+        // the elements that has less z-index should render sooner than other elements that has more z index 
         elements.sort((a, b) => a.z_index - b.z_index);
 
         for (var element of elements) {
+            // canvas element painting the element according the inner state
             element.paintElement(ctx);
         }
     }
 
+    // delete the element from canvas rendering
     deleteElement(element) {
         for (var i = 0; i < this.#elements.length; i++) {
             if (element == this.#elements[i]) {
@@ -102,6 +119,7 @@ export default class CustomCanvas {
         }
     }
 
+    // add element to render
     addElement(el) {
         if (!(el instanceof Element)) {
             throw new Error("element should be instance of subclass of Element class");
@@ -110,7 +128,7 @@ export default class CustomCanvas {
         this.#elements.push(el);
     }
 
-    // getting the element that has the most z index in that point
+    // getting the element that has the most z index in the specified point 
     getElementAtPoint(x, y) {
         var elements = this.#elements;
 
@@ -125,6 +143,7 @@ export default class CustomCanvas {
             if (!element.is_selectable || max_z_index >= element.z_index) continue;
             
             // it's rectangle element
+            // check if point within the rectangle
             if (CustomCanvas.isXYWithinRectangle(x, y, element)) {
                 point_elem = element;
                 max_z_index = element.z_index;

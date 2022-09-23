@@ -1,6 +1,9 @@
 import Element from "../Element.js";
 import CustomCanvas from "../CustomCanvas.js";
 
+// change the element properties (width, height) by using the subclasses of this element
+// the next subclasses listed in SizeChangers
+// after the main naming the letter means the direction of button that it handle
 export default class SizeChangerElement extends Element {
     target_elem = null;
     is_active = false;
@@ -39,6 +42,7 @@ export default class SizeChangerElement extends Element {
         this.mouseMoveEvent = this.mouseMoveEvent.bind(this);
     }
 
+    // at what direction will be created the button
     setBtnCords() {}
 
     setEventsOnCanvas() {
@@ -63,6 +67,7 @@ export default class SizeChangerElement extends Element {
         }
     }
     
+    // the manipulations that need to make while moving the element
     mouseMoveEvent(e) {}
     
     mouseDownEvent(e) {
@@ -76,6 +81,7 @@ export default class SizeChangerElement extends Element {
         this.start_pos = {
             x: x * this.custom_canvas_obj.coef_similarity, y: y * this.custom_canvas_obj.coef_similarity
         }
+        // start props of element that we're changing
         this.start_props = {
             x: this.target_elem.cords.x,
             y: this.target_elem.cords.y,
@@ -83,6 +89,7 @@ export default class SizeChangerElement extends Element {
             height: this.target_elem.height 
         }
 
+        // set the new cursor 
         this.custom_canvas_obj.getCanvas().style.cursor = this.mouse_move_canvas_cursor_css;
     }
     
@@ -91,7 +98,8 @@ export default class SizeChangerElement extends Element {
         this.is_active = false;
         this.custom_canvas_obj.getCanvas().style.removeProperty("cursor");
     }
-     
+    
+    // paint usual white square
     paintElement(ctx) {
         this.setBtnCords();
         var rgb = this.rgb_color;

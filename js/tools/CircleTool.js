@@ -1,6 +1,7 @@
 import ToolR from "../ToolR.js";
 import CircleElement from "../elements/CircleElement.js";
 
+// creating the circle in canvas image
 export default class CircleTool extends ToolR {
     rectangle_as_square = true;
     canvasMouseUpEvent(e) {

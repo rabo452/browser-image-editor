@@ -1,5 +1,6 @@
 import SelectTool from "./SelectTool.js";
 
+// tool that changes the color of objects that has attribute rgb_color
 export default class ColorTool {
     constructor(color_input, custom_canvas_obj) {
         this.custom_canvas_obj = custom_canvas_obj;
@@ -10,6 +11,8 @@ export default class ColorTool {
 
     onChangeHandler(e) {
         this.custom_canvas_obj.rgb_color = this.hexToRgb(e.target.value);
+        // if current tool is select tool then change the selected element rgb_color 
+        // (as user wanted to change the color of this element)
         if (this.custom_canvas_obj.current_tool instanceof SelectTool) {
             this.custom_canvas_obj.current_tool.setColorOnSelectedElem(this.hexToRgb(e.target.value));
         }        

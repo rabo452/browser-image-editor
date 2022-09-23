@@ -5,6 +5,8 @@ export default class TriangleTool extends ToolR {
     canvasMouseUpEvent(e) {
         if (super.canvasMouseUpEvent(e)) return;
 
+        // the triangle creates by 3 points
+        // the left, right and top one
         var triangle_points = {
             top: {
                 x: this.rectangle_props.x + this.rectangle_props.width / 2,

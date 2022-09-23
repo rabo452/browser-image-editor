@@ -15,6 +15,7 @@ import TriangleTool from "./tools/TriangleTool.js";
 import CropTool from "./tools/CropTool.js";
 import SaveTool from "./tools/SaveTool.js";
 
+// define html elements
 var zoom_input = document.querySelector("#zoom-input");
 var add_img_btn = document.querySelector("#add-image-btn");
 var color_input = document.querySelector("#color-picker-input");
@@ -35,17 +36,20 @@ var elem_props_tool_text = document.querySelector("#elem-props-tool-text");
 var crop_btn = document.querySelector("#crop-tool-btn");
 var download_img_btn = document.querySelector("#download-image-btn");
 
+// aditional canvas need for jobs that we can't afford to use the in main canvas
 var canvas = document.querySelector("#canvas");
 var additional_canvas = document.querySelector("#additional-canvas");
 var main_img_loader = document.querySelector("#main-image-loader");
 var start_field = document.querySelector("#start-field");
 var tools_block = document.querySelector("#tools-block");
 
+// global object that render image in canvas 
 var custom_canvas_obj;
 var main_image = new Image();
+// function that handle the start of program
 main_image.onload = mainImageLoadedEvent
 
-
+// load main image that the user can edit 
 main_img_loader.onchange = (e) => {
     if (!main_img_loader.files || !main_img_loader.files[0]) {
         alert("please choose image for continue to work");
@@ -53,15 +57,18 @@ main_img_loader.onchange = (e) => {
     }
 
     var file = main_img_loader.files[0];
+    // convert the file obj to img tag
     var file_src = URL.createObjectURL(file);
-
     main_image.src = file_src;
 
+    // hide the start input 
+    // show the progarm
     canvas.style.display = "block";
     tools_block.style.display = "flex";
     start_field.style.display = "none";
 }
 
+// init events on tools buttons
 function initTools() {
     var tools = [];
     tools.push(new ImageTool(add_img_btn, custom_canvas_obj));
@@ -79,29 +86,42 @@ function initTools() {
     tools.push(new CropTool(crop_btn, custom_canvas_obj));
     tools.push(new SaveTool(save_img_btn, custom_canvas_obj, download_img_btn));
     
+    // sometimes the one tool need to contact with other tool
+    // so store them in one place
     custom_canvas_obj.tools = tools;
 }
 
-
+// main image loaded
 function mainImageLoadedEvent(img) {
     var image_props = {
         width: img.path[0].width,
         height: img.path[0].height
     }
 
+    // image was cropped, so need to recreate the tool buttons
+    // as the events listeners were setted by previous handlers
+    // that have the information about previous image that was cropped
     if (custom_canvas_obj) {
         clearListenersOnTools();
     }
+    // after crop need to redefine the objects
     defineToolBlocks();
 
+    // global state object creating
     custom_canvas_obj = new CustomCanvas(canvas, image_props.width, image_props.height);
-
+    
+    // create main image on canvas 
+    // global state object has the link for each element that in image
     var element = new ImageElement({x: 0, y: 0}, image_props.width, image_props.height, 0, main_image);
     custom_canvas_obj.addElement(element);
+    // create image by elements that the global state has
     custom_canvas_obj.renderImage();
+
+    // need this links when the user cropped the element
+    // redefine the main_image.src to new src and restart editor
     custom_canvas_obj.main_image = main_image;
     custom_canvas_obj.additional_canvas = additional_canvas;
-
+    
     initTools();
 }
 

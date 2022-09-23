@@ -1,3 +1,4 @@
+// showing the cursor x, y in real time
 export default class CursorTool {
     #current_pos = {
         x: 0,

@@ -1,9 +1,12 @@
+// tool that changes the elem width, height, z-index and text (if the attribute text is present)
+// tool works only with selectTool
 export default class ElemPropsTool {
     #elem_props = {
         width: 0,
         height: 0,
         z_index: 0
     }
+    // target elem
     #elem = null;
     
     constructor(tool_width_input, tool_height_input, z_index_input, elem_props_tool_text, custom_canvas_obj) {

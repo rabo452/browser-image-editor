@@ -1,5 +1,6 @@
 import SelectTool from "./SelectTool.js";
 
+// tool that sets the line width of line that paint tool maden
 export default class LineWidthTool {
     constructor(input_block, custom_canvas_obj) {
         this.custom_canvas_obj = custom_canvas_obj;
@@ -16,6 +17,8 @@ export default class LineWidthTool {
         }
         this.custom_canvas_obj.line_width = +val;
 
+        // if current tool is select tool then change the line width of current selected element 
+        // (if this property exists)
         if (this.custom_canvas_obj.current_tool instanceof SelectTool) {
             this.custom_canvas_obj.getToolRef(SelectTool).setWidthLineOnSelectedElem(+val);
         }

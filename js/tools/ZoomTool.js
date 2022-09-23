@@ -1,5 +1,6 @@
 import CustomCanvas from "../CustomCanvas.js";
 
+// zoom tool that setting the scaling of image before rendering
 export default class ZoomTool {
     custom_canvas_obj = null;
 
@@ -29,6 +30,7 @@ export default class ZoomTool {
     
         zoom_percent = Math.round(zoom_percent);
         input.value = `${zoom_percent}%`;
+        // set zoom or similarity coefficent
         this.custom_canvas_obj.coef_similarity = zoom_percent / 100;
         this.custom_canvas_obj.renderImage();
     }

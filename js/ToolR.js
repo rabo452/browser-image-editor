@@ -22,6 +22,7 @@ export default class ToolR extends Tool {
     constructor(toolBtn, custom_canvas_obj) {
         super(toolBtn, custom_canvas_obj);
 
+        // bind events handlers with this object
         this.canvasMouseDownEvent = this.canvasMouseDownEvent.bind(this);
         this.canvasMouseMoveEvent = this.canvasMouseMoveEvent.bind(this);
         this.canvasMouseUpEvent = this.canvasMouseUpEvent.bind(this);
@@ -59,6 +60,7 @@ export default class ToolR extends Tool {
             height: 0
         }
 
+        // start cords that user clicked
         this.mouse_down_cords = {
             x: (e.x - this.custom_canvas_obj.offsetX) / this.custom_canvas_obj.coef_similarity,
             y: (e.y - this.custom_canvas_obj.offsetY) / this.custom_canvas_obj.coef_similarity
@@ -71,13 +73,19 @@ export default class ToolR extends Tool {
         this.mouse_down = true;
     }
 
+    // draw dashed rect using cords
     canvasMouseMoveEvent(e) {
         if (!this.mouse_down || e.button != 0) return;
 
+        // current x, y 
         var x = (e.x - this.custom_canvas_obj.offsetX) / this.custom_canvas_obj.coef_similarity,
             y = (e.y - this.custom_canvas_obj.offsetY) / this.custom_canvas_obj.coef_similarity;
 
         this.rectangle_props = {
+            // for rendering the rect we need to know the top left corner
+            // if current x less than x of point that user started
+            // then user going to left so the start of rect would be current x
+            // the same for y
             x: x < this.mouse_down_cords.x ? x : this.mouse_down_cords.x,
             y: y < this.mouse_down_cords.y ? y : this.mouse_down_cords.y,
             width: Math.abs(this.mouse_down_cords.x - x),
@@ -103,7 +111,9 @@ export default class ToolR extends Tool {
             2
         );
     }
-
+    
+    // stop selecting area
+    // last time calculation
     canvasMouseUpEvent(e) {
         if (e.button != 0 || !this.mouse_down) return true;
 
@@ -131,6 +141,8 @@ export default class ToolR extends Tool {
         return false;
     }
 
+    // to paint the rect need to know the x, y of left corner and width, height
+    // it's only one time when creating some objects on canvas outside render method
     paintDashedRect(x, y, width, height, strokeStyle, lineDash = 2) {
         var ctx = this.custom_canvas_obj.getCtx();
         ctx.lineWidth = lineDash;
