@@ -36,7 +36,7 @@ var elem_props_tool_text = document.querySelector("#elem-props-tool-text");
 var crop_btn = document.querySelector("#crop-tool-btn");
 var download_img_btn = document.querySelector("#download-image-btn");
 
-// aditional canvas need for jobs that we can't afford to use the in main canvas
+// aditional canvas need for jobs that we can't let to use the in main canvas
 var canvas = document.querySelector("#canvas");
 var additional_canvas = document.querySelector("#additional-canvas");
 var main_img_loader = document.querySelector("#main-image-loader");
